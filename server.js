@@ -1,6 +1,6 @@
 //@desc Ensuring we open the app in developement mode
 if(process.env.NODE_ENV !=='production') {
-    require('dotenv').config()
+    require('dotenv').config(); //!!!!!!!!
 }
 
 const express = require('express')
@@ -8,6 +8,7 @@ const app = express()
 const expressLayouts = require('express-ejs-layouts')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
+//const dotenv = require('dotenv').config({ path:'./env'}) //!!!!!!
 
 const indexRouter = require('./routes/index')
 const authorRouter = require('./routes/authors')
