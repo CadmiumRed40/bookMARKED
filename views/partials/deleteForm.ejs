@@ -1,0 +1,5 @@
+ <!-- Cant use a simple anchor tag to delete. 
+    _method=DELETE is called by router.delete in the author route, using method-override in server.js -->
+<form method="POST" action="/authors/<%= author.id %>?_method=DELETE">
+    <button type="submit">Delete</button>
+</form>

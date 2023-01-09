@@ -45,12 +45,23 @@ router.get('/:id', (req,res) => {
     res.send('Show Author' + req.params.id)
 })
 
-router.get(':id/edit', (req,res) => {
-    res.send('Edit Author' + req.params.id)
+router.get('/:id/edit', async (req,res) => {
+    try {
+        const author = await Author.findById(req.params.id)
+        res.send('authors/edit', { author: author })
+    } catch {
+        res.redirect('/authors')
+    }
 })
 
 router.put('/:id', (req,res) => {
     res.send('Update Author' + req.params.id)
+})
+
+//Not using GET because once a web index crawls over your page it clicks on all of your GET links and will end up deleting all of your information.
+//This is why we are using 'methodOverride' and 'DELETE' instead. This also means we cannot use simple anchor tags in our views. 
+router.delete('/:id', (req,res) => {
+    res.send('Delete Author' + req.params.id)
 })
 
 module.exports = router
