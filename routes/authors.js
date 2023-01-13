@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Author = require('../models/author')
+const Book = require('../models/book')
 
 //@desc /authors (All Author route)
 router.get('/', async (req, res) => {
@@ -40,8 +41,17 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.get('/:id', (req,res) => {
-    res.send('Show Author' + req.params.id)
+router.get('/:id', async (req,res) => {
+    try {
+        const author = await Author.findById(req.params.id)
+        const books = await Book.find({ author: author.id}).limit(6).exec()
+        res.render('authors/show', {
+            author: author,
+            booksByAuthor: books
+        })
+    } catch {
+        res.redirect('/')
+    }
 })
 
 router.get('/:id/edit', async (req,res) => {
@@ -53,6 +63,7 @@ router.get('/:id/edit', async (req,res) => {
     }
 })
 
+//@desc Edit author route. Similar to create author with modifications using try/catch to find the author and populating the name field and .save to save the change from req.body.name 
 router.put('/:id', async (req,res) => {
    let author
     try {
@@ -74,8 +85,19 @@ router.put('/:id', async (req,res) => {
 
 //Not using GET because once a web index crawls over your page it clicks on all of your GET links and will end up deleting all of your information.
 //This is why we are using 'methodOverride' and 'DELETE' instead. This also means we cannot use simple anchor tags in our views. 
-router.delete('/:id', (req,res) => {
-    res.send('Delete Author' + req.params.id)
+router.delete('/:id', async (req,res) => {
+    let author
+    try {
+        author = await Author.findById(req.params.id)
+        await author.remove()
+        res.redirect(`/authors`)
+    } catch {
+        if(author == null) {
+            res.redirect('/')
+        } else {
+            res.redirect(`/authors/${author.id}`)
+        }
+    }
 })
 
 module.exports = router
