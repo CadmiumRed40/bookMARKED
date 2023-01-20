@@ -47,22 +47,85 @@ saveCover(book, req.body.cover)
 
 try{
    const newBook = await book.save()
-   //res.redirect('books/${newBook.id}')
+   res.redirect(`books/${newBook.id}`)
    res.redirect('books')
 } catch {
    renderNewPage(res, book, true)
    }
 })
 
+//@desc Show book route
+router.get('/:id', async (req, res) => {
+   try {
+      const book = await Book.findById(req.params.id).populate('author').exec()
+      res.render('books/show', { book: book })
+   } catch {
+      res.redirect('/')
+   }
+})
+
+//@desc Edit book route
+router.get('/:id/edit', async (req, res) => {
+   try {
+      const book = await Book.findById(req.params.id)
+      renderEditPage(res, book)
+   } catch {
+     res.redirect('/')
+   }
+})
+
+
+//@desc Update Book Route
+router.put('/:id', async (req, res) => {
+   let book
+
+try{
+   book = book.findById(req.params.id)
+   book.title = req.body.title
+   book.author = req.body.authorId
+   book.publishDate = new Date(req.body.publishDate)
+   book.pageCount = req.body.pageCount
+   book.description = req.body.description
+   if (req.body.cover != null && req.body.cover !== '') {
+      saveCover(book, req.body.cover)
+   }
+   await book.save()
+   res.redirect(`/books/${book.id}`)
+} catch {
+   if (book != null){
+   renderEditPage(res, book, true)
+   } else {
+      redirect('/')
+      }
+   }
+})
+
+//@desc function to render a new page for creating a new book
 async function renderNewPage(res, book, hasError = false) {
+   renderFormPage(res, book, 'new', hasError)
+}
+
+//@desc function to render an edit page
+async function renderEditPage(res, book, hasError = false) {
+   renderFormPage(res, book, 'edit', hasError)
+}
+
+//@desc function to render pages
+async function renderFormPage(res, book, form, hasError = false) {
    try {
       const authors = await Author.find({})
       const params = {
          authors: authors,
          book: book
       }
-      if(hasError) params.errorMessage = 'Error Creating Book'
-      res.render('books/new', params)
+      if (hasError){
+         if (form === 'edit'){
+            params.errorMessage = 'Error Updating Book'
+         } else {
+            params.errorMessage = 'Error Creating Book'
+         }
+      }
+      res.render(`books/${form}`, params)
     } catch {
       res.redirect('/books')
     }
