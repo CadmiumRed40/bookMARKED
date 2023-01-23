@@ -80,9 +80,9 @@ router.put('/:id', async (req, res) => {
    let book
 
 try{
-   book = book.findById(req.params.id)
+   book = await Book.findById(req.params.id)
    book.title = req.body.title
-   book.author = req.body.authorId
+   book.author = req.body.author
    book.publishDate = new Date(req.body.publishDate)
    book.pageCount = req.body.pageCount
    book.description = req.body.description
@@ -95,7 +95,7 @@ try{
    if (book != null){
    renderEditPage(res, book, true)
    } else {
-      redirect('/')
+      res.redirect('/')
       }
    }
 })
