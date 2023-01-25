@@ -100,6 +100,25 @@ try{
    }
 })
 
+//@desc Delete Books Page
+router.delete('/:id', async (req, res) => {
+   let book
+   try {
+      book = await Book.findById(req.params.id)
+      await book.remove()
+      res.redirect(`/books`)
+  } catch {
+      if(book != null) {
+          res.render('books/show', {
+            book: book,
+            errorMessage: 'Could not remove book'
+          })
+      } else {
+          res.redirect(`/`)
+      }
+  }
+})
+
 //@desc function to render a new page for creating a new book
 async function renderNewPage(res, book, hasError = false) {
    renderFormPage(res, book, 'new', hasError)
