@@ -1,0 +1,6 @@
+@import '/stylesheets/shared/fonts.css';
+
+:root {
+    font-family: 'Nunito';
+    font-size: 20px;
+}
