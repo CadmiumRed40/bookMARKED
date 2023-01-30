@@ -4,3 +4,8 @@
     font-family: 'Nunito';
     font-size: 20px;
 }
+
+body {
+    background-image: linear-gradient(to left, rgba(164, 176, 208, 0.814), rgb(111, 116, 140));
+    
+}
