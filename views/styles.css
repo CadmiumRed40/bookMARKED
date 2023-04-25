@@ -1,25 +1,21 @@
-@import '/stylesheets/shared/fonts.css';
-
+/* Global variables */
 :root {
-    font-family: 'Nunito';
-    font-size: 20px;
     --primary-color: #000;
     --secondary-color: #fff;
     --border-color: #000;
     --border-radius: 5px;
     --padding: 10px;
     --margin-bottom: 20px;
-}
-
-body {
-    background-image: linear-gradient(to left, rgba(164, 176, 208, 0.814), rgb(111, 116, 140));
+  }
+  
+  /* Global styles */
+  body {
     background-color: var(--secondary-color);
     color: var(--primary-color);
     font-family: Arial, sans-serif;
     font-size: 16px;
     line-height: 1.5;
-}
-  /* Global styles */
+  }
   
   a {
     color: var(--primary-color);
